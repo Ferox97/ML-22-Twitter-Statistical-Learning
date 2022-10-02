@@ -1,6 +1,11 @@
 package com.twitterAPI.TwitterAPI;
 
 import com.mashape.unirest.http.*;
+import com.opencsv.CSVWriter;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +25,9 @@ public class Main {
 
 	  Elements title = doc.select("rss channel item title");
 	  
-	  for(int i = 0; i < title.size(); i++) {   
+	  System.out.println("Stampo i 10 titoli più recenti trovati:\n");
+	  
+	  for(int i = 0; i < 10; i++) {   // title.size()
 		  String s = title.get(i).toString();
 		  String s2 = s.substring(7,s.length() - 8);
 		  System.out.println(s2);
@@ -40,19 +47,34 @@ public class Main {
    
 	    JSONObject myObj = response.getBody().getObject(); // Mi salvo in un oggetto JSON la risposta della mia API
 	    
-	    List<String> list = new ArrayList<String>(); // Lista che contiene gli ID dei Tweet
+	    List<String> TweetIDs = new ArrayList<String>(); // Lista che contiene gli ID dei Tweet
+	    List<String> TweetTexts = new ArrayList<String>(); // Lista che contiene i testi dei Tweet
 	    
 	    JSONArray array = myObj.getJSONArray("data"); // Array provvisorio nel quale colleziono DATA (contenitore JSON)
 	    
 	    for(int i = 0 ; i < array.length() ; i++){ // Riempio la lista con gli ID dei tweet scorrendo array
-	    	list.add(array.getJSONObject(i).getString("id"));
+	    	TweetIDs.add(array.getJSONObject(i).getString("id")); //Lista di ID
+	    	TweetTexts.add(array.getJSONObject(i).getString("text")); //Lista di Testi
 	    }
 	    
-	    System.out.println("[ Numero di Tweet trovati ] : " + list.toArray().length); // La dimensione della lista corrisponderà al numero di Tweet trovati
-	    System.out.println(Arrays.toString(list.toArray())); // Stampo list
-
+	    System.out.println("\n[ Numero di Tweet trovati ] : " + TweetIDs.toArray().length + "\n"); // La dimensione della lista corrisponderà al numero di Tweet trovati
+	    System.out.println(TweetIDs); // Stampo gli ID
+	    System.out.println(TweetTexts); // Stampo i Testi
 	    
-	    System.out.println(myObj.toString(4)); // Stampo il JSON che ricevo come risposta dalla Twitter API
+	    File file = new File("./export-tweets");
+	    
+	        FileWriter outputfile = new FileWriter(file);
+	        CSVWriter writer = new CSVWriter(outputfile);      
+	     
+	        
+	        for(int i = 0 ; i < array.length() ; i++){
+	        	String[] data = { array.getJSONObject(i).getString("id") , array.getJSONObject(i).getString("text") };
+		        writer.writeNext(data);
+		    }	      
+	  
+	        writer.close();
+
+	    //System.out.println(myObj.toString(4)); // Stampo il JSON che ricevo come risposta dalla Twitter API
 	
   }
 }
