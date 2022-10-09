@@ -5,39 +5,28 @@ import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
-import org.jsoup.select.Elements;
 
 public class Main {
 	
   public static void main (String []args) throws Exception {
-	  
-	  Document doc = Jsoup.parse(Jsoup.connect("https://news.google.com/rss?hl=it&gl=IT&ceid=IT:it").get().toString(), Parser.xmlParser());
 
-	  Elements title = doc.select("rss channel item title");
+	  System.out.println("Questi sono i Link delle 10 notizie più recenti trovate su Google News:\n");
+
+	  List<String> GoogleNewsURLs = GoogleNews.cercaNotizie();
+	  for (int i=0; i<GoogleNewsURLs.size();i++) {
+
+		  System.out.println(GoogleNewsURLs.get(i));
+	  }
 	  
-	  System.out.println("Stampo i 10 titoli più recenti trovati:\n");
-	  
-	  for(int i = 0; i < 10; i++) {   // title.size()
-		  String s = title.get(i).toString();
-		  String s2 = s.substring(7,s.length() - 8);
-		  System.out.println(s2);
-		  
-		}  
-	  
-	  //System.out.println(link.text()); // prints empty string
+	  System.out.println("\nPer ognuno di questi link cerco dei Tweet correlati:\n");
 
 	  int maxResults = 10;
-	  String query = "Prova"; // uso %20 come encoder al posto dello Spazio altrimenti ricevo errore dalla API | Qua ci andrà il titolo estratto da google news
+	  String query = "ciao"; // uso %20 come encoder al posto dello Spazio altrimenti ricevo errore dalla API | Qua ci andrà il titolo estratto da google news
 	  
 	  Unirest.setTimeouts(0, 0);
 	    HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/tweets/search/recent?query="+query+"&max_results="+maxResults)
