@@ -15,9 +15,9 @@ public class Main {
 		  System.out.println(GoogleNewsURLs.get(i));
 	  }
 	  
-	  System.out.println("\nPer ognuno di questi link cerco dei Tweet correlati:\n");
+	  System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...\n");
 	  
-	  Q1_UsersLookup.popolaQ1();
+	  Q1_UsersLookup.popolaQ1(); // Questo è da modificare perchè Q1 deve avere un ciclo nel quale cerca i Tweet più recenti a partire da GoogleNewsURLs
 	
   }
 }

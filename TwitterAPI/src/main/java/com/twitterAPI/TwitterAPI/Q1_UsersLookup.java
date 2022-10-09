@@ -15,30 +15,26 @@ public class Q1_UsersLookup {
 	
 	public static void popolaQ1 () throws Exception {
 	
-	int maxResults = 10;
+	int maxResults = 10; //FISSATO A 10 MA DA CAMBIARE
 	  String query = "ciao"; // uso %20 come encoder al posto dello Spazio altrimenti ricevo errore dalla API | Qua ci andrà il titolo estratto da google news
 	  
 	  Unirest.setTimeouts(0, 0);
-	    HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/tweets/search/recent?query="+query+"&max_results="+maxResults)
-	      .header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
-	      .header("Cookie", "guest_id=v1%3A166315287309161276")
+	    HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/tweets/search/recent?query=" + query + "&max_results="+ maxResults + "&tweet.fields=author_id")
+	    	      .header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
+	    	      .header("Cookie", "guest_id=v1%3A166315287309161276")
 	      .asJson(); // Qua credo posso anche salvarmi direttamente una String
  
 	    JSONObject myObj = response.getBody().getObject(); // Mi salvo in un oggetto JSON la risposta della mia API
 	    
-	    List<String> TweetIDs = new ArrayList<String>(); // Lista che contiene gli ID dei Tweet
-	    List<String> TweetTexts = new ArrayList<String>(); // Lista che contiene i testi dei Tweet
+	    List<String> TweetAuthors = new ArrayList<String>(); // Lista che conterrà gli autori
 	    
 	    JSONArray array = myObj.getJSONArray("data"); // Array provvisorio nel quale colleziono DATA (contenitore JSON)
 	    
 	    for(int i = 0 ; i < array.length() ; i++){ // Riempio la lista con gli ID dei tweet scorrendo array
-	    	TweetIDs.add(array.getJSONObject(i).getString("id")); //Lista di ID
-	    	TweetTexts.add(array.getJSONObject(i).getString("text")); //Lista di Testi
+	    	TweetAuthors.add(array.getJSONObject(i).getString("author_id")); //Lista di ID
 	    }
 	    
-	    System.out.println("\n[ Numero di Tweet trovati ] : " + TweetIDs.toArray().length + "\n"); // La dimensione della lista corrisponderà al numero di Tweet trovati
-	    System.out.println(TweetIDs); // Stampo gli ID
-	    System.out.println(TweetTexts); // Stampo i Testi
+	    System.out.println("Ho trovato " + TweetAuthors.toArray().length + " Profili\n"); // La dimensione della lista corrisponderà al numero di Tweet trovati
 	    
 	    File file = new File("./export-tweets");
 	    
@@ -47,7 +43,7 @@ public class Q1_UsersLookup {
 	     
 	        
 	        for(int i = 0 ; i < array.length() ; i++){
-	        	String[] data = { array.getJSONObject(i).getString("id") , array.getJSONObject(i).getString("text") };
+	        	String[] data = { array.getJSONObject(i).getString("author_id") };
 		        writer.writeNext(data);
 		    }	      
 	  
