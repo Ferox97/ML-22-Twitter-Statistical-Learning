@@ -24,7 +24,7 @@ public class GoogleNews {
 		List<String> GoogleNewsURLs = new ArrayList<String>();
 		Document doc = Jsoup.parse(Jsoup.connect("https://news.google.com/rss?hl=it&gl=IT&ceid=IT:it").get().toString(),Parser.xmlParser());
 		Elements newsLinks = doc.select("rss channel item link");
-
+		
 		for(int i = 0; i < 10; i++) {   // title.size()  
 			
 			// TO:DO 
@@ -35,8 +35,11 @@ public class GoogleNews {
 			String temp = newsLinks.get(i).toString();
 			String tempDue = temp.substring(6 , temp.length() - 7); //Rimuovo i tag HTML <link> e </link>
 			String tempTre = getFinalURL(tempDue).substring(8); //Mi prendo il link del REDIRECT e rimuovo il https:// visto che le API di Twitter non lo vogliono nella Query
-			GoogleNewsURLs.add(tempTre);	  
-
+			
+			if (tempTre.length()<=128) {
+				GoogleNewsURLs.add(tempTre);	 
+			}
+			 
 		}  
 
 		return GoogleNewsURLs;
