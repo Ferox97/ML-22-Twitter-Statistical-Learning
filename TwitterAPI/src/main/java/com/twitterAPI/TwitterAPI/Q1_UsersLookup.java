@@ -35,9 +35,6 @@ public class Q1_UsersLookup {
 
 				List<String> TweetAuthors = new ArrayList<String>(); // Lista che conterrà gli autori
 
-
-
-
 				JSONArray array = myObj.getJSONArray("data"); // Array provvisorio nel quale colleziono DATA (contenitore JSON)
 
 				for(int i = 0 ; i < array.length() ; i++){ // Riempio la lista con gli ID dei tweet scorrendo array
@@ -46,17 +43,27 @@ public class Q1_UsersLookup {
 
 				System.out.println("Ho trovato " + TweetAuthors.toArray().length + " Profili\n"); // La dimensione della lista corrisponderà al numero di Tweet trovati
 
-				    
-
-
-				for(int i = 0 ; i < array.length() ; i++){ //Loop che stampa gli utenti trovati
-					String[] data = { array.getJSONObject(i).getString("author_id") };
-					writer.writeNext(data);
-				}	      
-
+				//Qua inizia la scrittura su file
 				
+				for(int i = 0 ; i < TweetAuthors.size() ; i++){ //Loop che scrive su CSV i ID utente, Followers, Following e bio
+		
+					String id_autore =  TweetAuthors.get(i);
+					
+					System.out.println(id_autore);
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					String[] data = {id_autore};
+					writer.writeNext(data);
 
-
+				}	      				
 
 			} catch (JSONException e ) {
 				
