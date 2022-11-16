@@ -12,7 +12,7 @@ public class Main {
 	  
 	  	File file = new File("./lista_q1");
 		FileWriter outputfile = new FileWriter(file);
-		CSVWriter writer = new CSVWriter(outputfile);
+		
 
 	  System.out.println("Ricerca news più recenti in corso...\n");
 	  
@@ -24,34 +24,26 @@ public class Main {
 	  
 	  for (int i=0; i<GoogleNewsURLs.size();i++) {
 
-		  System.out.println(GoogleNewsURLs.get(i));
+		  int leftCounter = i+1;
+		  System.out.println(leftCounter +") " +GoogleNewsURLs.get(i));
 	  }
 	  
-	  	
+	  ////////////////////////////////////////////////
 	  
-	  do {
+	  //do {
 
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
 		  //Thread.sleep(10000);
 
-		  counter--;
+		  //counter--;
 
-	  } while (counter !=0);
+	  //} while (counter !=0);
 	  
-	  System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...\n");
+	  //////////////////////////////////////////////////////////
 	  
-	  Q1_UsersLookup.popolaQ1(GoogleNewsURLs , outputfile , writer); // Questo è da modificare perchè Q1 deve avere un ciclo nel quale cerca i Tweet più recenti a partire da GoogleNewsURLs
+	  System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...");
+	  
+	  Q1_UsersLookup.popolaQ1(GoogleNewsURLs , outputfile); // Questo è da modificare perchè Q1 deve avere un ciclo nel quale cerca i Tweet più recenti a partire da GoogleNewsURLs
+	  
 	
   }
   
