@@ -79,7 +79,7 @@ public class Q1_UsersLookup {
 
 					JSONObject myObj4 = myObj3.getJSONObject("public_metrics");
 
-					followers = myObj4.getInt("followers_count"); // Questa cosa lo fotte non ho idea del perchè
+					followers = myObj4.getInt("followers_count");
 					following = myObj4.getInt("following_count");
 
 					////////////////////////////////
@@ -100,5 +100,5 @@ public class Q1_UsersLookup {
 		writer.close();
 
 	}
-
+	
 }

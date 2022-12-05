@@ -16,7 +16,7 @@ public class Main {
 
 	  System.out.println("Ricerca news più recenti in corso...\n");
 	  
-	  int counter=99999;
+	  int counter = 10;
 	  
 	  List<String> GoogleNewsURLs = GoogleNews.cercaNotizie();
 	  
@@ -28,23 +28,45 @@ public class Main {
 		  System.out.println(leftCounter +") " +GoogleNewsURLs.get(i));
 	  }
 	  
-	  ////////////////////////////////////////////////
-	  
-	  //do {
 
-		  //Thread.sleep(10000);
-
-		  //counter--;
-
-	  //} while (counter !=0);
-	  
-	  //////////////////////////////////////////////////////////
 	  
 	  System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...");
 	  
 	  Q1_UsersLookup.popolaQ1(GoogleNewsURLs , outputfile); // Questo è da modificare perchè Q1 deve avere un ciclo nel quale cerca i Tweet più recenti a partire da GoogleNewsURLs
 	  
-	
+	  String mostPopularUser = "1396537009817018371"; //Questo poi sarà il primo utente della lista ordinata Q2
+	  
+	  Q3_Favorites_List.popolaQ3(mostPopularUser);
+	  
+	  Q4_Statuses_Retweeters_Ids.popolaQ4(mostPopularUser);
+	  
+	  ////////////////////////////////////////////////////
+	  
+//	  do {
+
+		  // Q2 Ordina per priorità la lista di utenti 
+		  
+		  // Viene preso l'utente con priorità più alta
+		  
+		  // Q3 si vede i like più recenti di quell'utente e riempie una lista di utenti (autori del post ai quali ha messo like)
+		  
+		  // Q4 Si prende i Retweet di quell'utente e riempie una lista di utenti (autori dei post originali che ha retweettato)
+		  
+		  // Q5 Si prende la lista di liste alla quale l'utente è iscritto
+		  
+		  // Q6 si prende i subscribers di ogni lista proveniente da Q5
+		  
+//		  Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
+//
+//		  counter--;
+//
+//	  } while (counter !=0);
+	  
+	  //////////////////////////////////
+	  
+	  
+	  
+	  
   }
   
 }
