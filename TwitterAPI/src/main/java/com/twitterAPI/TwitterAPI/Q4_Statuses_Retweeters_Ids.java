@@ -16,7 +16,7 @@ public class Q4_Statuses_Retweeters_Ids {
 		int maxResults = 30;
 
 		Unirest.setTimeouts(0, 0);
-		HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/users/1396537009817018371/tweets?max_results="+ maxResults)
+		HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/users/"+ topUser +"/tweets?max_results="+ maxResults)
 				.header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
 				.header("Cookie", "guest_id=v1%3A166315287309161276")
 				.asJson();
@@ -41,13 +41,13 @@ public class Q4_Statuses_Retweeters_Ids {
 
 		}
 		
-		System.out.println("\nLista degli username degli autori dei Tweet che l'utente ha retweettato:\n");
-
-		for(int i = 0 ; i < tweetAuthorsUsernames.size() ; i++){
-
-			System.out.println((i+1)+ ") " + tweetAuthorsUsernames.get(i));
-
-		}
+//		System.out.println("\nLista degli username degli autori dei Tweet che l'utente ha retweettato:\n");
+//
+//		for(int i = 0 ; i < tweetAuthorsUsernames.size() ; i++){
+//
+//			System.out.println((i+1)+ ") " + tweetAuthorsUsernames.get(i));
+//
+//		}
 		
 		List<String> tweetAuthors = new ArrayList<String>();
 		

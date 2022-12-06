@@ -34,11 +34,13 @@ public class Main {
 	  
 	  Q1_UsersLookup.popolaQ1(GoogleNewsURLs , outputfile); // Questo è da modificare perchè Q1 deve avere un ciclo nel quale cerca i Tweet più recenti a partire da GoogleNewsURLs
 	  
-	  String mostPopularUser = "1396537009817018371"; //Questo poi sarà il primo utente della lista ordinata Q2
+	  String mostPopularUser = "917929550"; //Questo poi sarà il primo utente della lista ordinata Q2
 	  
 	  Q3_Favorites_List.popolaQ3(mostPopularUser);
 	  
 	  Q4_Statuses_Retweeters_Ids.popolaQ4(mostPopularUser);
+	  
+	  Q5_List_List.popolaQ5(mostPopularUser);
 	  
 	  ////////////////////////////////////////////////////
 	  
@@ -54,7 +56,7 @@ public class Main {
 		  
 		  // Q5 Si prende la lista di liste alla quale l'utente è iscritto
 		  
-		  // Q6 si prende i subscribers di ogni lista proveniente da Q5
+		  // Q6 si prende i subscribers di ogni lista proveniente da Q5 (Viene chiamato da Q5 e non dal main)
 		  
 //		  Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
 //
