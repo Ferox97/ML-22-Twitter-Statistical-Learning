@@ -1,64 +1,39 @@
 package com.twitterAPI.TwitterAPI;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
-
-import com.opencsv.CSVWriter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
 
 	public static void main (String []args) throws Exception {
 
-		// Configuro il Database per l'utilizzo
-
 		String url = "jdbc:mysql://localhost:3306/twitterapi";
 		String user = "root";
 		String password = "root";
-
-
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection(url, user, password);
 		System.out.println("Connection is Successful to the database" + url);
-		String query = "Insert into users(id,bio,followers,following,priority) values(222,'Prova di descrizione lunga',1,2,0)";
-		Statement statement = connection.createStatement();
-		statement.execute(query);	       
-
-		String query2 = "SELECT * FROM users WHERE id = 222"; 
-
-		ResultSet resultSet;
-		resultSet = statement.executeQuery(query2);
-		if(resultSet.next()){
-			System.out.println("Si");
-		}else{
-			System.out.println("No");
-		} 
-
-		File file = new File("./lista_q1");
-		FileWriter outputfile = new FileWriter(file);
-
-		System.out.println("Ricerca news più recenti in corso...\n");
+		//Statement statement = connection.createStatement();
+		//Statement statement = connection.prepareStatement();
+		
+		System.out.println("\nRicerca news più recenti in corso...\n");
 
 		List<String> GoogleNewsURLs = GoogleNews.cercaNotizie();
 
 		System.out.println("Questi sono gli URL delle " + GoogleNewsURLs.size() + " notizie più recenti:\n");
 
 		for (int i=0; i<GoogleNewsURLs.size();i++) {
-
+			
 			int leftCounter = i+1;
 			System.out.println(leftCounter +") " +GoogleNewsURLs.get(i));
+			
 		}
 
 		System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...");
 
-		Q1_UsersLookup.popolaQ1(GoogleNewsURLs , outputfile);
+		Q1_UsersLookup.popolaQ1(GoogleNewsURLs , connection);
 		
 //		  do {
 
@@ -91,8 +66,6 @@ public class Main {
 		//Q5_List_List.popolaQ5(mostPopularUser);
 
 		////////////////////////////////////////////////////
-
-		
 
 	}
 
