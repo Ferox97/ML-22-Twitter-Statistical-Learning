@@ -1,17 +1,17 @@
 package com.twitterAPI.TwitterAPI;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.*;
 
 public class Q6_List_Subscribers {
 	
-	public static void popolaQ6 (String listId) throws Exception {
+	public static void popolaQ6 (String listId , Connection connection) throws Exception {
 
 		int maxResults = 10;
 		
@@ -36,7 +36,8 @@ public class Q6_List_Subscribers {
 
 			for(int i = 0 ; i < subscribersIds.size() ; i++){
 
-				System.out.println((i+1)+ ") " +subscribersIds.get(i));
+				System.out.println((i+1)+ ") " + subscribersIds.get(i));
+				utility.addUserToDb(subscribersIds.get(i), connection);
 
 			}
 

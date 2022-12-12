@@ -55,11 +55,10 @@ public class Main {
 			
 			Q4_Statuses_Retweeters_Ids.popolaQ4(mostPopularUser , connection);
 
-			// Q5 Si prende la lista di liste alla quale l'utente è iscritto
+			Q5_List_List.popolaQ5(mostPopularUser, connection);
 
-			// Q6 si prende i subscribers di ogni lista proveniente da Q5 (Viene chiamato da Q5 e non dal main)
-
-			// Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
+			System.out.println("Ho finito un ciclo, attendo 5 secondi");
+		    Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
 			
 			utility.dropMostPopularUser(mostPopularUser , connection); //Sta cosa in futuro diventa azzeramento priorità - mi serve solo per test
 

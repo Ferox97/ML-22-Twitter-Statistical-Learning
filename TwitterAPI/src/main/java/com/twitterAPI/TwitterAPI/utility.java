@@ -21,23 +21,6 @@ public class utility {
 		int followers = 0;
 		int following = 0;
 
-		//-// RETRIEVE DEI DATI DELL'UTENTE A PARTIRE DALL'ID //-//
-
-		HttpResponse<JsonNode> response2 = Unirest.get("https://api.twitter.com/2/users/"+id_autore+"?user.fields=public_metrics,description")
-				.header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
-				.header("Cookie", "guest_id=v1%3A166315287309161276")
-				.asJson();
-
-		JSONObject myObj2 = response2.getBody().getObject();
-
-		JSONObject myObj3 = myObj2.getJSONObject("data");
-		bio = myObj3.getString("description");
-
-		JSONObject myObj4 = myObj3.getJSONObject("public_metrics");
-
-		followers = myObj4.getInt("followers_count");
-		following = myObj4.getInt("following_count");
-
 		//-// CONTROLLO SE ESISTE GIA' NEL DATABASE OPPURE NO //-//
 
 		if(utility.userExists(connection , id_autore)) {		
@@ -46,7 +29,24 @@ public class utility {
 
 		} else {
 
-			//-// SE NON ESISTE NEL DB COSTRUISCO LA QUERY DI INSERIMENTO E LA ESEGUO //-//
+			//-// RETRIEVE DEI DATI DELL'UTENTE A PARTIRE DALL'ID //-//
+
+			HttpResponse<JsonNode> response2 = Unirest.get("https://api.twitter.com/2/users/"+id_autore+"?user.fields=public_metrics,description")
+					.header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
+					.header("Cookie", "guest_id=v1%3A166315287309161276")
+					.asJson();
+
+			JSONObject myObj2 = response2.getBody().getObject();
+
+			JSONObject myObj3 = myObj2.getJSONObject("data");
+			bio = myObj3.getString("description");
+
+			JSONObject myObj4 = myObj3.getJSONObject("public_metrics");
+
+			followers = myObj4.getInt("followers_count");
+			following = myObj4.getInt("following_count");
+			
+			//-// NON ESISTE NEL DB QUINDI COSTRUISCO LA QUERY DI INSERIMENTO E LA ESEGUO //-//
 
 			String inserimento = "INSERT INTO users VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(inserimento);

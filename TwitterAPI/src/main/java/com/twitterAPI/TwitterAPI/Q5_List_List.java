@@ -1,5 +1,6 @@
 package com.twitterAPI.TwitterAPI;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,45 +9,50 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.*;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 public class Q5_List_List {
 
-	public static void popolaQ5 (String topUser) throws Exception {
+	public static void popolaQ5 (String topUser , Connection connection) throws Exception {
 
 		int maxResults = 30;
 
-		Unirest.setTimeouts(0, 0);
-		HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/users/"+ topUser +"/followed_lists?max_results=" + maxResults)
-				.header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
-				.header("Cookie", "guest_id=v1%3A166315287309161276")
-				.asJson();
-		
-		JSONObject myObj = response.getBody().getObject(); // Mi salvo in un oggetto JSON la risposta della mia API
+		try {
+			Unirest.setTimeouts(0, 0);
+			HttpResponse<JsonNode> response = Unirest.get("https://api.twitter.com/2/users/"+ topUser +"/followed_lists?max_results=" + maxResults)
+					.header("Authorization", "Bearer AAAAAAAAAAAAAAAAAAAAAAgihAEAAAAA08V3UoQzaQb4CXxqOWxuG%2FCZSAQ%3DZSLn3cIjU18U8NJrwzIYysPYrhbh07kslN37m3QjBg9wslgz3r")
+					.header("Cookie", "guest_id=v1%3A166315287309161276")
+					.asJson();
 
-		List<String> subscribedLists = new ArrayList<String>(); // Lista che conterrà gli autori
+			JSONObject myObj = response.getBody().getObject(); // Mi salvo in un oggetto JSON la risposta della mia API
 
-		JSONArray array = myObj.getJSONArray("data"); // Array provvisorio nel quale colleziono DATA (contenitore JSON)
+			List<String> subscribedLists = new ArrayList<String>(); // Lista che conterrà gli autori
 
-		for(int i = 0 ; i < array.length() ; i++){ // Riempio la lista con gli ID dei tweet scorrendo array
-			subscribedLists.add(array.getJSONObject(i).getString("id")); //Lista di ID
-		}
-		
-		System.out.println("\nLista degli id delle liste alle quali l'utente è iscritto:\n");
+			JSONArray array = myObj.getJSONArray("data"); // Array provvisorio nel quale colleziono DATA (contenitore JSON)
 
-		for(int i = 0 ; i < subscribedLists.size() ; i++){
+			for(int i = 0 ; i < array.length() ; i++){ // Riempio la lista con gli ID dei tweet scorrendo array
+				subscribedLists.add(array.getJSONObject(i).getString("id")); //Lista di ID
+			}
 
-			System.out.println((i+1)+ ") " +subscribedLists.get(i));
+			System.out.println("\nLista degli id delle liste alle quali l'utente è iscritto:\n");
 
-		}
-		
-		//Chiamo Q6 per ogni lista in modo tale da avere la lista dei Subscribers
-		
-		for(int i = 0 ; i < subscribedLists.size() ; i++){
-			
-			Q6_List_Subscribers.popolaQ6(subscribedLists.get(i));
-			
-			
+			for(int i = 0 ; i < subscribedLists.size() ; i++){
 
+				System.out.println((i+1)+ ") " +subscribedLists.get(i));
+
+			}
+
+			//Chiamo Q6 per ogni lista in modo tale da avere la lista dei Subscribers
+
+			for(int i = 0 ; i < subscribedLists.size() ; i++){
+
+				Q6_List_Subscribers.popolaQ6(subscribedLists.get(i) , connection);
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
 		}
 
 	}
