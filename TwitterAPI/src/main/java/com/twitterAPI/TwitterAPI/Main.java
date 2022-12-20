@@ -1,75 +1,73 @@
 package com.twitterAPI.TwitterAPI;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 
-import com.opencsv.CSVWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class Main {
-	
-  public static void main (String []args) throws Exception {
-	  
-	  	File file = new File("./lista_q1");
-		FileWriter outputfile = new FileWriter(file);
+
+	public static void main (String []args) throws Exception {
+
+		//-// MI CONNETTO AL DATABASE //-//
+
+		String url = "jdbc:mysql://localhost:3306/twitterapi";
+		String user = "root";
+		String password = "root";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection(url, user, password);
+		System.out.println("\nConnection is Successful to the database" + url);
+
+		//-// TROVO GLI URL DELLE NEWS PIU' RECENTI E LI STAMPO //-//
+
+		System.out.println("\nRicerca news più recenti in corso...\n");
+		List<String> GoogleNewsURLs = GoogleNews.cercaNotizie();
+		System.out.println("Questi sono gli URL delle " + GoogleNewsURLs.size() + " notizie più recenti:\n");
+
+		for (int i=0; i<GoogleNewsURLs.size();i++) {
+
+			int leftCounter = i+1;
+			System.out.println(leftCounter +") " +GoogleNewsURLs.get(i));
+
+		}
+
+		//-// CERCO I TWEET PIU RECENTI CHE INCLUDONO QUELLE NEWS E MI SALVO NEL DB GLI AUTORI //-//
+
+		System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...");
+
+		Q1_UsersLookup.popolaQ1(GoogleNewsURLs , connection);
+
+		//-// PARTO CON IL LOOP ITERATIVO SULLE VARIE CLASSI //-//
+
+		int counter = 4;
 		
+		String mostPopularUser = "";
 
-	  System.out.println("Ricerca news più recenti in corso...\n");
-	  
-	  int counter = 10;
-	  
-	  List<String> GoogleNewsURLs = GoogleNews.cercaNotizie();
-	  
-	  System.out.println("Questi sono gli URL delle " + GoogleNewsURLs.size() + " notizie più recenti:\n");
-	  
-	  for (int i=0; i<GoogleNewsURLs.size();i++) {
+		do {
+			
+			//-// PRENDO L'UTENTE CON PRIORITA' PIU' ALTA //-//
+			
+			mostPopularUser = utility.getMaxPriorityUser(connection); // Questo poi sarà il primo utente della lista ordinata Q2
 
-		  int leftCounter = i+1;
-		  System.out.println(leftCounter +") " +GoogleNewsURLs.get(i));
-	  }
-	  
+			//Q2
+			
+			Q3_Favorites_List.popolaQ3(mostPopularUser , connection);
+			
+			Q4_Statuses_Retweeters_Ids.popolaQ4(mostPopularUser , connection);
 
-	  
-	  System.out.println("\nCerco gli autori dei Tweet più recenti che contengono questi Link...");
-	  
-	  Q1_UsersLookup.popolaQ1(GoogleNewsURLs , outputfile); // Questo è da modificare perchè Q1 deve avere un ciclo nel quale cerca i Tweet più recenti a partire da GoogleNewsURLs
-	  
-	  String mostPopularUser = "917929550"; //Questo poi sarà il primo utente della lista ordinata Q2
-	  
-	  Q3_Favorites_List.popolaQ3(mostPopularUser);
-	  
-	  Q4_Statuses_Retweeters_Ids.popolaQ4(mostPopularUser);
-	  
-	  Q5_List_List.popolaQ5(mostPopularUser);
-	  
-	  ////////////////////////////////////////////////////
-	  
-//	  do {
+			Q5_List_List.popolaQ5(mostPopularUser, connection);
 
-		  // Q2 Ordina per priorità la lista di utenti 
-		  
-		  // Viene preso l'utente con priorità più alta
-		  
-		  // Q3 si vede i like più recenti di quell'utente e riempie una lista di utenti (autori del post ai quali ha messo like)
-		  
-		  // Q4 Si prende i Retweet di quell'utente e riempie una lista di utenti (autori dei post originali che ha retweettato)
-		  
-		  // Q5 Si prende la lista di liste alla quale l'utente è iscritto
-		  
-		  // Q6 si prende i subscribers di ogni lista proveniente da Q5 (Viene chiamato da Q5 e non dal main)
-		  
-//		  Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
-//
-//		  counter--;
-//
-//	  } while (counter !=0);
-	  
-	  //////////////////////////////////
-	  
-	  
-	  
-	  
-  }
-  
+			System.out.println("Ho finito un ciclo, attendo 5 secondi");
+		    Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
+			
+			utility.dropMostPopularUser(mostPopularUser , connection); //Sta cosa in futuro diventa azzeramento priorità - mi serve solo per test
+
+			counter--;
+
+		} while (counter !=0);
+
+
+	}
+
 }
 

@@ -1,17 +1,17 @@
 package com.twitterAPI.TwitterAPI;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.*;
 
 public class Q3_Favorites_List {
 
-	public static void popolaQ3 (String topUser) throws Exception {
+	public static void popolaQ3 (String topUser, Connection connection) throws Exception {
 		
 		int maxResults = 10;
 		
@@ -34,10 +34,14 @@ public class Q3_Favorites_List {
 		}
 		
 		System.out.println("\nLista degli autori dei Tweet ai quali l'utente più popolare ha messo like:\n");
+		
+		//-// AGGIUNGO TUTTI QUESTI UTENTI AL DATABASE SE NON CI SONO GIA' //-//
 
 		for(int i = 0 ; i < TweetAuthors.size() ; i++){
 
-			System.out.println((i+1)+ ") " +TweetAuthors.get(i));
+			System.out.println((i+1)+ ") " + TweetAuthors.get(i));
+			
+			utility.addUserToDb(TweetAuthors.get(i), connection);
 
 		}
 		
