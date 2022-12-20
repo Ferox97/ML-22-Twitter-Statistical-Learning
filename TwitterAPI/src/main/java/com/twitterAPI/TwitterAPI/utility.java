@@ -20,6 +20,7 @@ public class utility {
 		String bio = "";
 		int followers = 0;
 		int following = 0;
+		int isInteresting = 0 ;
 
 		//-// CONTROLLO SE ESISTE GIA' NEL DATABASE OPPURE NO //-//
 
@@ -41,23 +42,32 @@ public class utility {
 			JSONObject myObj3 = myObj2.getJSONObject("data");
 			bio = myObj3.getString("description");
 
-			JSONObject myObj4 = myObj3.getJSONObject("public_metrics");
+			if (bio != "") {
 
-			followers = myObj4.getInt("followers_count");
-			following = myObj4.getInt("following_count");
-			
-			//-// NON ESISTE NEL DB QUINDI COSTRUISCO LA QUERY DI INSERIMENTO E LA ESEGUO //-//
+				JSONObject myObj4 = myObj3.getJSONObject("public_metrics");
 
-			String inserimento = "INSERT INTO users VALUES (?, ?, ?, ?, ?)";
-			PreparedStatement statement = connection.prepareStatement(inserimento);
+				followers = myObj4.getInt("followers_count");
+				following = myObj4.getInt("following_count");
 
-			statement.setString(1, id_autore);
-			statement.setString(2, bio);
-			statement.setInt(3, followers);
-			statement.setInt(4, following);
-			statement.setInt(5, 0); // Priorita'
+				if ( (myObj4.getInt("tweet_count")>10000) ) {
+					isInteresting=1;
+				}
 
-			statement.executeUpdate();
+				//-// NON ESISTE NEL DB QUINDI COSTRUISCO LA QUERY DI INSERIMENTO E LA ESEGUO //-//
+
+				String inserimento = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)";
+				PreparedStatement statement = connection.prepareStatement(inserimento);
+
+				statement.setString(1, id_autore);
+				statement.setString(2, bio);
+				statement.setInt(3, followers);
+				statement.setInt(4, following);
+				statement.setInt(5, isInteresting);
+				statement.setFloat(6, 0.0000f); // Priorità
+				statement.executeUpdate();
+
+			}
+
 		}
 
 	}
@@ -99,12 +109,12 @@ public class utility {
 	}
 
 	public static void dropMostPopularUser(String mostPopularUser, Connection connection) throws Exception {
-		
+
 		String query = "DELETE FROM twitterapi.users WHERE id = " + mostPopularUser;
 
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(query);
-		
+
 	}
 
 }
