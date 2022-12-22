@@ -21,10 +21,8 @@ public class GoogleNews {
 		List<String> GoogleNewsURLs = new ArrayList<String>();
 		Document doc = Jsoup.parse(Jsoup.connect("https://news.google.com/rss?hl=it&gl=IT&ceid=IT:it").get().toString(),Parser.xmlParser());
 		Elements newsLinks = doc.select("rss channel item link");
-		
-		int maxNewsDaCercare = 10;
 
-		for(int i = 0; i < maxNewsDaCercare; i++) { 
+		for(int i = 0; i < newsLinks.size(); i++) { 
 
 			try {
 
@@ -39,9 +37,9 @@ public class GoogleNews {
 				}
 
 			} catch (MalformedURLException e) {
-				// // L'URL non è costruito bene
+				// L'URL non è costruito bene
 			} catch (IOException e) {
-				// Non so da che dipende ma comunque ignoro
+				// 
 			}
 		}  
 

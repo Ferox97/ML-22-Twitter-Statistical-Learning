@@ -18,12 +18,17 @@ public class Main {
 		Connection connection = DriverManager.getConnection(url, user, password);
 		System.out.println("\nConnection is Successful to the database" + url);
 
-		//-// TROVO GLI URL DELLE NEWS PIU' RECENTI E LI STAMPO //-//
+		//-// TROVO GLI URL DELLE NEWS PIU' RECENTI //-//
+	
+		// La ricerca delle google news più recenti è gestita dalla classe GoogleNews.java che restituisce una List di URL
+		// opportunamente formattati e pronti ad essere dati in pasto alle API di Twitter
 
 		System.out.println("\nRicerca news più recenti in corso...\n");
 		List<String> GoogleNewsURLs = GoogleNews.cercaNotizie();
 		System.out.println("Questi sono gli URL delle " + GoogleNewsURLs.size() + " notizie più recenti:\n");
 
+		//-// STAMPO LA LISTA DEGLI URL TROVATA DAL PRECEDENTE METODO PER DARE CONTO ALL'UTENTE DEI CRITERI DI RICERCA //-//
+		
 		for (int i=0; i<GoogleNewsURLs.size();i++) {
 
 			int leftCounter = i+1;
@@ -37,9 +42,9 @@ public class Main {
 
 		Q1_UsersLookup.popolaQ1(GoogleNewsURLs , connection);
 
-		//-// PARTO CON IL LOOP ITERATIVO SULLE VARIE CLASSI //-//
+		//-// PARTO CON IL LOOP ITERATIVO SULLE VARIE CLASSI. I TEMPI DI ATTESA SONO SCANDITI DAI LIMITI DI RICHIESTE DELLE TWITTER API //-//
 
-		int counter = 4;
+		int maxCicli = 10; 
 		
 		String mostPopularUser = "";
 
@@ -51,21 +56,28 @@ public class Main {
 
 			//Q2
 			
+			//-// ESPLORO L'UTENTE E TROVO ALTRI UTENTI A PARTIRE DAI LIKE CHE HA MESSO //-//
+			
 			Q3_Favorites_List.popolaQ3(mostPopularUser , connection);
 			
+			//-// ESPLORO L'UTENTE E TROVO ALTRI UTENTI A PARTIRE DAI RETWEET CHE HA FATTO //-//
+			
 			Q4_Statuses_Retweeters_Ids.popolaQ4(mostPopularUser , connection);
+			
+			//-// ESPLORO L'UTENTE E VEDO LE LISTE ALLE QUALI L'UTENTE E' SOTTOSCRITTO //-//
 
 			Q5_List_List.popolaQ5(mostPopularUser, connection);
 
 			System.out.println("Ho finito un ciclo, attendo 5 secondi");
 		    Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
 			
-			utility.dropMostPopularUser(mostPopularUser , connection); //Sta cosa in futuro diventa azzeramento priorità - mi serve solo per test
+		    //-// RIMUOVO L'UTENTE PIU' POPOLARE DAL DATABASE //-//
+		    
+			utility.setUserVisited(mostPopularUser , connection);
 
-			counter--;
+			maxCicli--;
 
-		} while (counter !=0);
-
+		} while (maxCicli !=0);
 
 	}
 

@@ -21,6 +21,7 @@ public class utility {
 		int followers = 0;
 		int following = 0;
 		int isInteresting = 0 ;
+		int alreadyVisited = 0 ;
 
 		//-// CONTROLLO SE ESISTE GIA' NEL DATABASE OPPURE NO //-//
 
@@ -42,20 +43,22 @@ public class utility {
 			JSONObject myObj3 = myObj2.getJSONObject("data");
 			bio = myObj3.getString("description");
 
+			//-// SE L'UTENTE NON HA NULLA NELLA BIO LO SCARTO //-//
+			
 			if (bio != "") {
 
 				JSONObject myObj4 = myObj3.getJSONObject("public_metrics");
 
 				followers = myObj4.getInt("followers_count");
 				following = myObj4.getInt("following_count");
+				
+				//-// UN UTENTE E' INTERESSANTE SE HA FATTO PIU DI 5000 TWEET //-//
 
-				if ( (myObj4.getInt("tweet_count")>10000) ) {
+				if ( (myObj4.getInt("tweet_count")>5000) ) {
 					isInteresting=1;
 				}
 
-				//-// NON ESISTE NEL DB QUINDI COSTRUISCO LA QUERY DI INSERIMENTO E LA ESEGUO //-//
-
-				String inserimento = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)";
+				String inserimento = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement statement = connection.prepareStatement(inserimento);
 
 				statement.setString(1, id_autore);
@@ -63,7 +66,8 @@ public class utility {
 				statement.setInt(3, followers);
 				statement.setInt(4, following);
 				statement.setInt(5, isInteresting);
-				statement.setFloat(6, 0.0000f); // Priorità
+				statement.setFloat(6, 0.0000f); // Priorità di default che poi verrà modificata da Q2
+				statement.setInt(7, alreadyVisited);
 				statement.executeUpdate();
 
 			}
@@ -89,10 +93,12 @@ public class utility {
 		} 
 
 	}
+	
+	//-// METODO CHE RESTITUISCE L'UTENTE CON PRIORITA' MAGGIORE //-//
 
 	public static String getMaxPriorityUser(Connection connection) throws Exception  {
 
-		PreparedStatement Statement = connection.prepareStatement("SELECT * FROM twitterapi.users WHERE followers = (SELECT MAX(followers) FROM twitterapi.users) LIMIT 1");
+		PreparedStatement Statement = connection.prepareStatement("SELECT * FROM twitterapi.users WHERE followers = (SELECT MAX(followers) FROM twitterapi.users WHERE alreadyVisited = 0) LIMIT 1");
 		ResultSet result = Statement.executeQuery();
 		String bestUser = "";
 
@@ -107,11 +113,13 @@ public class utility {
 		return bestUser;
 
 	}
+	
+	//-// METODO CHE RIMUOVE UN UTENTE DAL DATABASE A PARTIRE DA UN ID //-//
 
-	public static void dropMostPopularUser(String mostPopularUser, Connection connection) throws Exception {
+	public static void setUserVisited(String mostPopularUser, Connection connection) throws Exception {
 
-		String query = "DELETE FROM twitterapi.users WHERE id = " + mostPopularUser;
-
+		String query = "UPDATE twitterapi.users SET alreadyVisited = 1 WHERE id = " + mostPopularUser;
+		
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(query);
 

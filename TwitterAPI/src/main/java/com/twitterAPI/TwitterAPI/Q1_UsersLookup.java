@@ -14,7 +14,7 @@ public class Q1_UsersLookup {
 
 	public static void popolaQ1 (List<String> GoogleNewsURLs , Connection connection) throws Exception {
 
-		int maxResults = 50;
+		int maxResults = 100;
 		
 		//-// PER OGNI NEWS VEDO GLI UTENTI PIU' RECENTI CHE HANNO TWEETTATO QUEL URL //-//
 
