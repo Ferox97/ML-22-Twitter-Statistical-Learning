@@ -15,7 +15,7 @@ public class Q5_List_List {
 
 	public static void popolaQ5 (String topUser , Connection connection) throws Exception {
 
-		int maxResults = 30;
+		int maxResults = 50;
 
 		try {
 			Unirest.setTimeouts(0, 0);
@@ -42,7 +42,7 @@ public class Q5_List_List {
 
 			}
 
-			//Chiamo Q6 per ogni lista in modo tale da avere la lista dei Subscribers
+			//-// PER OGNI LISTA ALLA QUALE L'UTENTE E' SOTTOSCRITTO MI PRENDO I SUBSCRIBERS //-//
 
 			for(int i = 0 ; i < subscribedLists.size() ; i++){
 

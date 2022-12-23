@@ -15,7 +15,7 @@ public class Q4_Statuses_Retweeters_Ids {
 
 	public static void popolaQ4 (String topUser, Connection connection) throws Exception {
 
-		int maxResults = 30;
+		int maxResults = 100;
 
 		try {
 			Unirest.setTimeouts(0, 0);
@@ -63,6 +63,8 @@ public class Q4_Statuses_Retweeters_Ids {
 			
 			}
 			
+			//-// AGGIUNGO TUTTI QUESTI UTENTI AL DATABASE SE NON CI SONO GIA' //-//
+			
 			System.out.println("\nLista degli id degli autori dei Tweet che l'utente ha retweettato:\n");
 
 			for(int i = 0 ; i < tweetAuthors.size() ; i++){
@@ -74,13 +76,10 @@ public class Q4_Statuses_Retweeters_Ids {
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 	}

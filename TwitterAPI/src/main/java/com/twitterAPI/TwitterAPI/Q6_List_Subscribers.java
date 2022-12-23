@@ -13,7 +13,7 @@ public class Q6_List_Subscribers {
 	
 	public static void popolaQ6 (String listId , Connection connection) throws Exception {
 
-		int maxResults = 10;
+		int maxResults = 100;
 		
 		
 		 Unirest.setTimeouts(0, 0);
@@ -33,6 +33,8 @@ public class Q6_List_Subscribers {
 			}
 			
 			System.out.println("\nLista degli id degli utenti che sono subscribers della lista #"+ listId +":\n");
+			
+			//-// AGGIUNGO TUTTI QUESTI UTENTI AL DATABASE SE NON CI SONO GIA' //-//
 
 			for(int i = 0 ; i < subscribersIds.size() ; i++){
 
