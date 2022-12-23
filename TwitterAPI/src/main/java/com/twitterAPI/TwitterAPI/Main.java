@@ -69,9 +69,10 @@ public class Main {
 			Q5_List_List.popolaQ5(mostPopularUser, connection);
 
 			System.out.println("Ho finito un ciclo, attendo 5 secondi");
-			Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
-
+			
 			utility.setUserVisited(mostPopularUser , connection);
+			
+			Thread.sleep(5000); // 5 secondi ma poi questo dovrà essere 15 minuti
 
 			maxCicli--;
 
