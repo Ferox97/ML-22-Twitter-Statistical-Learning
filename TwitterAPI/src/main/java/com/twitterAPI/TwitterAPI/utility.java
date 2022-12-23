@@ -66,7 +66,7 @@ public class utility {
 				statement.setInt(3, followers);
 				statement.setInt(4, following);
 				statement.setInt(5, isInteresting);
-				statement.setFloat(6, 0.0000f); // Priorità di default che poi verrà modificata da Q2
+				statement.setFloat(6, 1.0000f); // Priorità di default che poi verrà modificata da Q2
 				statement.setInt(7, alreadyVisited);
 				statement.executeUpdate();
 
@@ -98,7 +98,7 @@ public class utility {
 
 	public static String getMaxPriorityUser(Connection connection) throws Exception  {
 
-		PreparedStatement Statement = connection.prepareStatement("SELECT * FROM twitterapi.users WHERE followers = (SELECT MAX(followers) FROM twitterapi.users WHERE alreadyVisited = 0) LIMIT 1");
+		PreparedStatement Statement = connection.prepareStatement("SELECT * FROM twitterapi.users WHERE priority = (SELECT MIN(priority) FROM twitterapi.users WHERE alreadyVisited = 0) LIMIT 1");
 		ResultSet result = Statement.executeQuery();
 		String bestUser = "";
 
